@@ -4,7 +4,7 @@
 #include "product.hpp"
 
 using namespace std;
-vector<Product> all_product;
+vector<Product> all_products;
 
 // class
 Product::Product(string NAME, unsigned int QUANTITY, double PRICE) : m_name(NAME), m_quantity(QUANTITY), m_price(PRICE) {}
@@ -39,9 +39,9 @@ Product create_product()
 
     cin >> productName;
 
-    for (int i = 0; i < all_product.size(); i++)
+    for (int i = 0; i < all_products.size(); i++)
     {
-        if (all_product[i].Get_Name() == productName)
+        if (all_products[i].Get_Name() == productName)
         {
             productAlreadyExists = true;
             break;
@@ -90,22 +90,22 @@ Product create_product()
 
     clear();
 
-    for (int i = 0; i < all_product.size(); i++)
+    for (int i = 0; i < all_products.size(); i++)
     {
-        if (all_product[i].Get_Name() == productName)
+        if (all_products[i].Get_Name() == productName)
         {
-            all_product[i].add_quantity(Quantity);
+            all_products[i].add_quantity(Quantity);
             cout << "\033[32mProduct already exists, added quantity to it. (" << any++ << ")\033[0m" << endl;
 
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-            return all_product[i];
+            return all_products[i];
         }
     }
 
     Product product(productName, Quantity, Price);
-    all_product.push_back(product);
+    all_products.push_back(product);
 
     cout << "Added: \033[32m" << product.Get_Name() << "\033[0m" << endl;
 
@@ -152,11 +152,11 @@ void remove_product(string Name)
 {
     bool haveFind = false;
 
-    for (int i = 0; i < all_product.size(); i++)
+    for (int i = 0; i < all_products.size(); i++)
     {
-        if (all_product[i].Get_Name() == Name)
+        if (all_products[i].Get_Name() == Name)
         {
-            all_product.erase(all_product.begin() + i);
+            all_products.erase(all_products.begin() + i);
             cout << "\033[32m" << Name << " has been removed" << "\033[0m" << endl;
             haveFind = true;
             break;
@@ -169,22 +169,23 @@ void remove_product(string Name)
     }
 };
 void comfirmOrder()
+
 {
     clear();
 
-    if (!all_product.empty())
+    if (!all_products.empty())
     {
         string choice;
 
         cout << "Would you purchase this product: " << endl;
         cout << "" << endl;
 
-        for (int i = 0; i < all_product.size(); i++)
+        for (int i = 0; i < all_products.size(); i++)
         {
-            cout << "\033[32m" << all_product[i].Get_Name()
-                 << "\033[90m" << " -> Quantity: " << "\033[32m" << all_product[i].Get_Quantity()
-                 << "\033[90m" << " -> Price: " << "\033[32m" << all_product[i].Get_Price()
-                 << "\033[90m" << " -> Total: " << "\033[32m" << all_product[i].Get_Price() * all_product[i].Get_Quantity() << "$"
+            cout << "\033[32m" << all_products[i].Get_Name()
+                 << "\033[90m" << " -> Quantity: " << "\033[32m" << all_products[i].Get_Quantity()
+                 << "\033[90m" << " -> Price: " << "\033[32m" << all_products[i].Get_Price()
+                 << "\033[90m" << " -> Total: " << "\033[32m" << all_products[i].Get_Price() * all_products[i].Get_Quantity() << "$"
                  << "\033[0m" << endl;
         }
 
@@ -193,7 +194,7 @@ void comfirmOrder()
         if (choice == "Yes")
         {
             cout << "Purchase" << endl;
-            all_product.clear();
+            all_products.clear();
         }
         else if (choice == "No")
         {
@@ -207,6 +208,26 @@ void comfirmOrder()
     else
     {
         cout << "\033[31mThe cart is empty\033[0m" << endl;
+    }
+}
+void Display_Cart()
+{
+    if (!all_products.empty())
+    {
+        clear();
+        for (int i = 0; i < all_products.size(); i++)
+        {
+            int x = i + 1;
+            cout << "\033[90mProduct " << x << ": \033[32m" << all_products[i].Get_Name()
+                 << "\033[90m, Price: \033[32m" << all_products[i].Get_Price()
+                 << "\033[90m, Quantity: \033[32m" << all_products[i].Get_Quantity()
+                 << "\033[0m" << endl;
+        }
+    }
+    else
+    {
+        clear();
+        cout << "There are no products" << endl;
     }
 }
 void clear()
@@ -230,13 +251,13 @@ bool Action(int Number)
     {
         string Name;
         clear();
-        if (!all_product.empty())
+        if (!all_products.empty())
         {
             cout << "Choose a product to delete: " << endl;
 
-            for (int i = 0; i < all_product.size(); i++)
+            for (int i = 0; i < all_products.size(); i++)
             {
-                cout << "\033[90m" << all_product[i].Get_Name() << "\033[0m" << endl;
+                cout << "\033[90m" << all_products[i].Get_Name() << "\033[0m" << endl;
             }
             cout << "" << endl;
             cout << "Product Name: " << endl;
@@ -254,25 +275,7 @@ bool Action(int Number)
     }
     case 3:
     {
-
-        if (!all_product.empty())
-        {
-            clear();
-            for (int i = 0; i < all_product.size(); i++)
-            {
-                int x = i + 1;
-                cout << "\033[90mProduct " << x << ": \033[32m" << all_product[i].Get_Name()
-                     << "\033[90m, Price: \033[32m" << all_product[i].Get_Price()
-                     << "\033[90m, Quantity: \033[32m" << all_product[i].Get_Quantity()
-                     << "\033[0m" << endl;
-            }
-        }
-        else
-        {
-            clear();
-            cout << "There are no products" << endl;
-        }
-
+        Display_Cart();
         return true;
         break;
     }

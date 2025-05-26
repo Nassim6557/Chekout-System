@@ -26,6 +26,8 @@ void drawFristText();
 void drawIndication();
 void remove_product(string Name);
 void comfirmOrder();
+void Display_Cart();
+
 void clear();
 bool Action(int Number);
 
